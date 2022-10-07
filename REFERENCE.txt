@@ -1,0 +1,6 @@
+https://developer.oculus.com/reference/
+https://developer.oculus.com/documentation/unity/
+
+https://developer.oculus.com/reference/unity/v43/
+
+https://learn.microsoft.com/en-us/dotnet/api/system.io.ports.serialport.writeline?view=dotnet-plat-ext-6.0#system-io-ports-serialport-writeline(system-string)

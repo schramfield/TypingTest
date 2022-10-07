@@ -55,6 +55,7 @@ bool receivingSerial = false;
 int Li = 0; // i will be our STIM value, it goes 1-12, each step representing 5kohms
 //int Lsustain = 0;
 int Lmaximum = 0;
+int Lsustain = 0;
 bool calibL = false;
 bool Ltouch = false;
 
@@ -62,6 +63,7 @@ bool Ltouch = false;
 int Ri = 0; // i will be our STIM value, it goes 1-12, each step representing 5kohms
 //int Rsustain = 0;
 int Rmaximum = 0;
+int Rsustain = 0;
 bool calibR = false;
 bool Rtouch = false;
 
@@ -148,15 +150,15 @@ void loop(){ ///////////////////////////////////////
     // LEFT == 1
     if (fromUnity() == 1) {
       updateI(Lmaximum, LEFTside);
-      //updateI(0, RIGHTside);
       delay(tap);
+      updateI(Lsustain, LEFTside);
       }
       
     // RIGHT == 2
     else if (fromUnity() == 2){
       updateI(Rmaximum, RIGHTside);
-      //updateI(0, LEFTside);
       delay(tap);
+      updateI(Rsustain, RIGHTside);
       }
       
     // BOTH == 3
@@ -164,6 +166,8 @@ void loop(){ ///////////////////////////////////////
       updateI(Rmaximum, RIGHTside);
       updateI(Lmaximum, LEFTside);
       delay(tap);
+      updateI(Rsustain, RIGHTside);
+      updateI(Lsustain, LEFTside);
     }
     
     // nothing == 0 or nothing
@@ -186,6 +190,7 @@ void loop(){ ///////////////////////////////////////
     digitalWrite(LNO, HIGH);
     Li = 0;
     Lmaximum = 0;
+    Lsustain = 0;
     allOFF();
     flash(g3);
     delay(flsh);
@@ -202,6 +207,7 @@ void loop(){ ///////////////////////////////////////
     digitalWrite(RNO, HIGH);
     Ri = 0;
     Rmaximum = 0;
+    Rsustain = 0;
     allOFF();
     flash(g4);
     delay(flsh);
@@ -245,8 +251,8 @@ void loop(){ ///////////////////////////////////////
   //
   if (digitalRead(SetCalib) == HIGH && calibL == true) {
     Lmaximum = Li;
+    Lsustain = Li - 2;
     digitalWrite(g3, HIGH);
-    //Lsustain = Li-2;
     rainbow();
     allOFF();
     delay(500);
@@ -256,8 +262,8 @@ void loop(){ ///////////////////////////////////////
   //
   if (digitalRead(SetCalib) == HIGH && calibR == true) {
     Rmaximum = Ri;
+    Rsustain = Ri - 2;
     digitalWrite(g4, HIGH);
-    //Lsustain = Li-2;
     rainbow();
     allOFF();
     delay(500);
