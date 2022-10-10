@@ -1,0 +1,30 @@
+void Start()
+    {
+        GetComponent<ButtonController>().InteractableStateChanged.AddListener(InitiateEvent);
+        stim = GameObject.FindGameObjectWithTag("stim");
+        stimulator = stim.GetComponent<Stimulation>();
+    }
+
+    void InitiateEvent(InteractableStateArgs state) {
+        finger = state.Tool.tag;
+        right = state.Tool.IsRightHandedTool;
+        if (state.NewInteractableState == InteractableState.ProximityState)
+        {
+            proximityEvent.Invoke();
+            stimulator.StopStimulation(finger, right);
+        }
+        else if (state.NewInteractableState == InteractableState.ContactState)
+        {
+            contactEvent.Invoke();
+            stimulator.StartStimulation100(finger, right);
+        }
+        else if (state.NewInteractableState == InteractableState.ActionState)
+        {
+            actionEvent.Invoke();
+        }
+        else
+        {
+            defaultEvent.Invoke();
+            stimulator.StopStimulation(finger, right);
+        }
+    }
