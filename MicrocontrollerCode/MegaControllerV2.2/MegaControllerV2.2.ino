@@ -149,28 +149,39 @@ void loop(){ ///////////////////////////////////////
     // LEFT == 1
     if (fromUnity() == 1) {
       updateI(Lmaximum, LEFTside);
-      delay(tap);
+      
+      // debugger lights
+      //
+      //flash2(g1,g2);
       }
       
     // RIGHT == 2
     else if (fromUnity() == 2){
       updateI(Rmaximum, RIGHTside);
-      delay(tap);
+       
+      // debugger lights
+      //
+      //rainbow();
       }
       
     // BOTH == 3
     else if (fromUnity() == 3){
       updateI(Rmaximum, RIGHTside);
       updateI(Lmaximum, LEFTside);
-      delay(tap);
+      
+      // debugger lights
+      //
+      //flash2(y1, y2);
     }
     
     // nothing == 0 or nothing
     else if (fromUnity() == 0) {
       updateI(0, LEFTside);
       updateI(0, RIGHTside);
-      rainbow();
-      delay(tap);
+      
+      // debugger lights
+      //
+      //flash2(r1, r2);
     }
   }
 
@@ -320,22 +331,22 @@ bool allOFF() {
 
 // UNITY RELATED FUNCTIONS ///////////////////////
 int fromUnity(){
-  if(Serial.available()){
+    if(Serial.available()){
     receivingSerial = true;
     digitalWrite(b2, HIGH);
     digitalWrite(b1, LOW);
-    int data = Serial.read();
+    String message = Serial.readStringUntil(',');
 
-    if(data = 0){
+    if(message == "ZERO"){
       return 0;
     }
-    if(data = 1){
+    if(message == "ONE"){
+      return 1;
+    }
+    if(message == "TWO"){
       return 2;
     }
-    if(data = 2){
-      return 2;
-    }
-    if(data = 3) {
+    if(message == "THREE") {
       return 3;
     }
   }
