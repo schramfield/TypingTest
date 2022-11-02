@@ -178,7 +178,7 @@ void loop(){ ///////////////////////////////////////
     }
     
     // nothing == 0 or nothing
-    else {
+    else if (fromUnity() == 0){
       updateI(0, LEFTside);
       updateI(0, RIGHTside);
       delay(tap);
@@ -338,6 +338,9 @@ int fromUnity(){
     receivingSerial = true;
     digitalWrite(b2, HIGH);
     digitalWrite(b1, LOW);
+    
+    // should be char maybe????
+    //
     int data = Serial.read();
 
     if (data = 0) {
