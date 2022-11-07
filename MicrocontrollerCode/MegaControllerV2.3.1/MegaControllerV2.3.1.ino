@@ -148,9 +148,10 @@ void loop(){ ///////////////////////////////////////
   // LEFT = 1, RIGHT = 2, LEFT & RIGHT = 3, nothing = 0
   //
   if (calibL == false && calibR == false) {
+    int STIMvalue = fromUnity();
     
     // LEFT == 1
-    if (fromUnity() == 1) {
+    if (STIMvalue == 1) {
       updateI(Lmaximum, LEFTside);
       delay(tap);
       // debugger lights
@@ -159,7 +160,7 @@ void loop(){ ///////////////////////////////////////
       }
       
     // RIGHT == 2
-    else if (fromUnity() == 2){
+    else if (STIMvalue == 2){
       updateI(Rmaximum, RIGHTside);
        delay(tap);
       // debugger lights
@@ -168,7 +169,7 @@ void loop(){ ///////////////////////////////////////
       }
       
     // BOTH == 3
-    else if (fromUnity() == 3){
+    else if (STIMvalue == 3){
       updateI(Rmaximum, RIGHTside);
       updateI(Lmaximum, LEFTside);
       delay(tap);
@@ -178,7 +179,7 @@ void loop(){ ///////////////////////////////////////
     }
     
     // nothing == 0 or nothing
-    else if (fromUnity() == 0){
+    else if (STIMvalue == 0){
       updateI(0, LEFTside);
       updateI(0, RIGHTside);
       delay(tap);
@@ -336,25 +337,59 @@ bool allOFF() {
 int fromUnity(){
     if(Serial.available()){
     receivingSerial = true;
+    Serial.setTimeout(50);
     digitalWrite(b2, HIGH);
     digitalWrite(b1, LOW);
-    
-    // should be char maybe????
-    //
-    int data = Serial.read();
 
-    if (data = 0) {
-      return 0;
-    }
-    if(data = 1){
+//    byte data[] = BitConverter.GetBytes(1);
+//    int nothelpful = Serial.readBytes(1);
+///WHAT THE FUCK
+    String data = Serial.readStringUntil(',');
+//    char randomData[] = data;
+
+    if (data == "1"){
       return 1;
     }
-    if(data = 2){
+        if (data == "2"){
       return 2;
     }
-    if(data = 3) {
+        if (data == "3"){
       return 3;
     }
+        if (data == "0"){
+      return 0;
+    }
+//    
+//    
+//    if(strchr(data, '1') != NULL) {
+//      return 1;
+//    }
+//    
+//    if(strchr(data, '2') != NULL) {
+//      return 2;
+//    }
+//  
+//   if(strchr(data, '3') != NULL) {
+//      return 3;
+//    }
+//   
+//    if(strchr(data, '0') != NULL) {
+//     return 0;
+//    }
+//  
+
+//    if (count) = 1){
+//      return 0;
+//    }
+//    if(data == "ONE"){
+//      return 1;
+//    }
+//    if(data == "TWO"){
+//      return 2;
+//    }
+//    if(data == "THREE") {
+//      return 3;
+ //   }
   }
   else {
     receivingSerial = false;
