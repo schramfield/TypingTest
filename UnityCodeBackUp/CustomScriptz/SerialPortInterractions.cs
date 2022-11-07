@@ -33,11 +33,6 @@ public class SerialPortInterractions : MonoBehaviour
     private int brate = 9600;
     private int timeOut = 50;
     private SerialPort stream;
-    //public byte[] one = BitConverter.GetBytes(1);
-    ////public char[] two = { '2', '0' };
-    //public byte[] two = BitConverter.GetBytes(2);
-    //public byte[] three = BitConverter.GetBytes(3);
-    //public byte[] zero = BitConverter.GetBytes(0);
 
 
     // This function opens the com port for serial communcation

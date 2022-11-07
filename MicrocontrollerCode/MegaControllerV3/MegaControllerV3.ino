@@ -1,4 +1,6 @@
-// trying to convert serial communication to ints/bytes
+// This one works
+// don't fuck it up
+//
 
 #include <SoftwareSerial.h>
 
