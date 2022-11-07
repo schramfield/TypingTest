@@ -1,5 +1,4 @@
-// now takes strings "ONE," "TWO," etc.
-// trying to fix calib light problem
+// trying to convert serial communication to ints/bytes
 
 #include <SoftwareSerial.h>
 
@@ -47,6 +46,8 @@ int STIMlights[6] = {g1, g2, y1, y2, r1, r2};
 //useful numbers maybe //////////////////////////////
 #define flsh 75 // this way I can change the flash time easily
 #define tap 100 // let's work out what feels natural...
+#define rest 250
+#define pause 500
 
 // Unity-related variables
 bool receivingSerial = false;
@@ -123,10 +124,12 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(LCalib) == LOW && calibL == true){
     calibL = false;
     updateI(0, LEFTside);
+    delay(pause);
   }
   if (digitalRead(RCalib) == LOW && calibR == true){
     calibR = false;
     updateI(0, RIGHTside);
+    delay(pause);
   }
   if(calibL == false && calibR == false && receivingSerial == false) {
     digitalWrite(b2, LOW);
@@ -145,40 +148,41 @@ void loop(){ ///////////////////////////////////////
   // LEFT = 1, RIGHT = 2, LEFT & RIGHT = 3, nothing = 0
   //
   if (calibL == false && calibR == false) {
+    int STIMvalue = fromUnity();
     
     // LEFT == 1
-    if (fromUnity() == 1) {
+    if (STIMvalue == 1) {
       updateI(Lmaximum, LEFTside);
-      
+      delay(tap);
       // debugger lights
       //
       //flash2(g1,g2);
       }
       
     // RIGHT == 2
-    else if (fromUnity() == 2){
+    else if (STIMvalue == 2){
       updateI(Rmaximum, RIGHTside);
-       
+       delay(tap);
       // debugger lights
       //
       //rainbow();
       }
       
     // BOTH == 3
-    else if (fromUnity() == 3){
+    else if (STIMvalue == 3){
       updateI(Rmaximum, RIGHTside);
       updateI(Lmaximum, LEFTside);
-      
+      delay(tap);
       // debugger lights
       //
       //flash2(y1, y2);
     }
     
     // nothing == 0 or nothing
-    else if (fromUnity() == 0) {
+    else if (STIMvalue == 0){
       updateI(0, LEFTside);
       updateI(0, RIGHTside);
-      
+      delay(tap);
       // debugger lights
       //
       //flash2(r1, r2);
@@ -225,7 +229,7 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(STIMup) == HIGH && calibL == true && Li < 12) {
     Li = Li+1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Increase RIGHT
@@ -233,7 +237,7 @@ void loop(){ ///////////////////////////////////////
     if (digitalRead(STIMup) == HIGH && calibR == true && Ri < 12) {
     Ri = Ri+1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Decrease LEFT
@@ -241,7 +245,7 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(STIMdown) == HIGH && calibL == true && Li > -1) {
     Li = Li-1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Decrease RIGHT
@@ -249,27 +253,27 @@ void loop(){ ///////////////////////////////////////
     if (digitalRead(STIMdown) == HIGH && calibR == true && Ri > -1) {
     Ri = Ri-1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Set LEFT
   //
   if (digitalRead(SetCalib) == HIGH && calibL == true) {
     Lmaximum = Li;
-    digitalWrite(g3, HIGH);
     rainbow();
     allOFF();
-    delay(500);
+    digitalWrite(g3, HIGH);
+    delay(rest);
   }
 
   // Set RIGHT
   //
   if (digitalRead(SetCalib) == HIGH && calibR == true) {
     Rmaximum = Ri;
-    digitalWrite(g4, HIGH);
     rainbow();
     allOFF();
-    delay(500);
+    digitalWrite(g4, HIGH);
+    delay(rest);
   }
 }
 // END OF LOOP
@@ -333,22 +337,59 @@ bool allOFF() {
 int fromUnity(){
     if(Serial.available()){
     receivingSerial = true;
+    Serial.setTimeout(50);
     digitalWrite(b2, HIGH);
     digitalWrite(b1, LOW);
-    String message = Serial.readStringUntil(',');
 
-    if(message == "ZERO"){
-      return 0;
-    }
-    if(message == "ONE"){
+//    byte data[] = BitConverter.GetBytes(1);
+//    int nothelpful = Serial.readBytes(1);
+///WHAT THE FUCK
+    String data = Serial.readStringUntil(',');
+//    char randomData[] = data;
+
+    if (data == "1"){
       return 1;
     }
-    if(message == "TWO"){
+        if (data == "2"){
       return 2;
     }
-    if(message == "THREE") {
+        if (data == "3"){
       return 3;
     }
+        if (data == "0"){
+      return 0;
+    }
+//    
+//    
+//    if(strchr(data, '1') != NULL) {
+//      return 1;
+//    }
+//    
+//    if(strchr(data, '2') != NULL) {
+//      return 2;
+//    }
+//  
+//   if(strchr(data, '3') != NULL) {
+//      return 3;
+//    }
+//   
+//    if(strchr(data, '0') != NULL) {
+//     return 0;
+//    }
+//  
+
+//    if (count) = 1){
+//      return 0;
+//    }
+//    if(data == "ONE"){
+//      return 1;
+//    }
+//    if(data == "TWO"){
+//      return 2;
+//    }
+//    if(data == "THREE") {
+//      return 3;
+ //   }
   }
   else {
     receivingSerial = false;
