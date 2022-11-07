@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
+using System;
 
 // PURPOSE:
 // This script controls all serial port communication
@@ -30,8 +31,13 @@ public class SerialPortInterractions : MonoBehaviour
     //
     public string com = "COM21";
     private int brate = 9600;
-    private int timeOut = 500;
+    private int timeOut = 50;
     private SerialPort stream;
+    //public byte[] one = BitConverter.GetBytes(1);
+    ////public char[] two = { '2', '0' };
+    //public byte[] two = BitConverter.GetBytes(2);
+    //public byte[] three = BitConverter.GetBytes(3);
+    //public byte[] zero = BitConverter.GetBytes(0);
 
 
     // This function opens the com port for serial communcation
@@ -131,8 +137,7 @@ public class SerialPortInterractions : MonoBehaviour
         //
         if (TouchIsActive.LeftTouch == true && TouchIsActive.RightTouch == false)
         {
-            stream.Write("ONE,");
-
+            stream.Write("1,");
             // Debugs commented out because it clutters data collection
             //
             //Debug.Log("Left Stim triggered");
@@ -140,19 +145,19 @@ public class SerialPortInterractions : MonoBehaviour
         }
         else if (TouchIsActive.RightTouch == true && TouchIsActive.LeftTouch == false)
         {
-            stream.Write("TWO,");
+            stream.WriteLine("2,");
             //Debug.Log("Right Stim Triggered");
             stream.BaseStream.Flush();
         }
         else if (TouchIsActive.RightTouch == true && TouchIsActive.LeftTouch == true)
         {
-            stream.Write("THREE,");
+            stream.WriteLine("3,");
             //Debug.Log("Both Stim Triggered");
             stream.BaseStream.Flush();
         }
         else
         {
-            stream.Write("ZERO,");
+            stream.WriteLine("0,");
             //Debug.Log("both Stim disengaged");
             stream.BaseStream.Flush();
         }
