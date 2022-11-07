@@ -1,4 +1,5 @@
-// changing Serial input to match Luis' code, adding #include, changing FromUnity and adding a light flash
+// This one works
+// don't fuck it up
 //
 
 #include <SoftwareSerial.h>
@@ -47,6 +48,8 @@ int STIMlights[6] = {g1, g2, y1, y2, r1, r2};
 //useful numbers maybe //////////////////////////////
 #define flsh 75 // this way I can change the flash time easily
 #define tap 100 // let's work out what feels natural...
+#define rest 250
+#define pause 500
 
 // Unity-related variables
 bool receivingSerial = false;
@@ -55,14 +58,12 @@ bool receivingSerial = false;
 //LEFT side
 int Li = 0; // i will be our STIM value, it goes 1-12, each step representing 5kohms
 int Lmaximum = 0;
-int Lsustain = 0;
 bool calibL = false;
 bool Ltouch = false;
 
 //RIGHT side
 int Ri = 0; // i will be our STIM value, it goes 1-12, each step representing 5kohms
 int Rmaximum = 0;
-int Rsustain = 0;
 bool calibR = false;
 bool Rtouch = false;
 
@@ -123,10 +124,12 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(LCalib) == LOW && calibL == true){
     calibL = false;
     updateI(0, LEFTside);
+    delay(pause);
   }
   if (digitalRead(RCalib) == LOW && calibR == true){
     calibR = false;
     updateI(0, RIGHTside);
+    delay(pause);
   }
   if(calibL == false && calibR == false && receivingSerial == false) {
     digitalWrite(b2, LOW);
@@ -145,33 +148,41 @@ void loop(){ ///////////////////////////////////////
   // LEFT = 1, RIGHT = 2, LEFT & RIGHT = 3, nothing = 0
   //
   if (calibL == false && calibR == false) {
+
+    // establishing a variable to store the read so the read only has to happen once
+    //
+    int STIMvalue = fromUnity();
     
     // LEFT == 1
-    if (fromUnity() == 1) {
+    if (STIMvalue == 1) {
       updateI(Lmaximum, LEFTside);
       delay(tap);
       }
       
     // RIGHT == 2
-    else if (fromUnity() == 2){
+    else if (STIMvalue == 2){
       updateI(Rmaximum, RIGHTside);
-      delay(tap);
+       delay(tap);
       }
       
     // BOTH == 3
-    else if (fromUnity() == 3){
+    else if (STIMvalue == 3){
       updateI(Rmaximum, RIGHTside);
       updateI(Lmaximum, LEFTside);
       delay(tap);
     }
     
     // nothing == 0 or nothing
-    else if (fromUnity() == 0) {
+    else if (STIMvalue == 0){
       updateI(0, LEFTside);
       updateI(0, RIGHTside);
-      rainbow();
       delay(tap);
     }
+
+    // do NOT include an else
+    // or it will trigger every time there's no STIM
+    // re: every 0.05 seconds
+    //
   }
 
 
@@ -190,7 +201,7 @@ void loop(){ ///////////////////////////////////////
     flash(g3);
     delay(flsh);
     flash(g3);
-    delay(500);
+    delay(flsh);
   }
 
   // begin calibrate RIGHT
@@ -206,7 +217,7 @@ void loop(){ ///////////////////////////////////////
     flash(g4);
     delay(flsh);
     flash(g4);
-    delay(500);
+    delay(flsh);
   }
 
   // Increase LEFT
@@ -214,7 +225,7 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(STIMup) == HIGH && calibL == true && Li < 12) {
     Li = Li+1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Increase RIGHT
@@ -222,7 +233,7 @@ void loop(){ ///////////////////////////////////////
     if (digitalRead(STIMup) == HIGH && calibR == true && Ri < 12) {
     Ri = Ri+1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Decrease LEFT
@@ -230,7 +241,7 @@ void loop(){ ///////////////////////////////////////
   if (digitalRead(STIMdown) == HIGH && calibL == true && Li > -1) {
     Li = Li-1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Decrease RIGHT
@@ -238,27 +249,27 @@ void loop(){ ///////////////////////////////////////
     if (digitalRead(STIMdown) == HIGH && calibR == true && Ri > -1) {
     Ri = Ri-1;
     wink(b2);
-    delay(1000);
+    delay(pause);
   }
 
   // Set LEFT
   //
   if (digitalRead(SetCalib) == HIGH && calibL == true) {
     Lmaximum = Li;
-    digitalWrite(g3, HIGH);
     rainbow();
     allOFF();
-    delay(500);
+    digitalWrite(g3, HIGH);
+    delay(rest);
   }
 
   // Set RIGHT
   //
   if (digitalRead(SetCalib) == HIGH && calibR == true) {
     Rmaximum = Ri;
-    digitalWrite(g4, HIGH);
     rainbow();
     allOFF();
-    delay(500);
+    digitalWrite(g4, HIGH);
+    delay(rest);
   }
 }
 // END OF LOOP
@@ -319,31 +330,59 @@ bool allOFF() {
 
 
 // UNITY RELATED FUNCTIONS ///////////////////////
+// Call this to get Unity data through the serial port
+//
 int fromUnity(){
-  if(Serial.available()){
+
+  // Only do it when the serial port is open
+  //
+    if(Serial.available()){
+
+    //There's a switch here for use in other part of the script
+    //
     receivingSerial = true;
+
+    // timeout actually matters a lot- it defaults to 1 second which is way to slow
+    //
+    Serial.setTimeout(50);
+
+    // gotta have an indicator light or this is a black box
+    //
     digitalWrite(b2, HIGH);
     digitalWrite(b1, LOW);
-    int data = Serial.read();
 
-    if(data = 0){
-      return 0;
+    // hint: make sure your string from Unity ends in a comma or this won't work
+    // Just do the read once and store it or you'll slow your system
+    //
+    String data = Serial.readStringUntil(',');
+
+    // now decode the string- make sure to use " not '
+    // that nearly killed me
+    //
+    if (data == "1"){
+      return 1;
     }
-    if(data = 1){
+    if (data == "2"){
       return 2;
     }
-    if(data = 2){
-      return 2;
-    }
-    if(data = 3) {
+    if (data == "3"){
       return 3;
     }
+    if (data == "0"){
+      return 0;
+    }
   }
+
+  // if it's not recieving turn off the switch and swap the lights
+  //
   else {
     receivingSerial = false;
     digitalWrite(b2, LOW);
     digitalWrite(b1, HIGH);
   }
+
+  // if not recieving or something is broken send back a neutral -1 signal which changes nothing
+  //
   return -1;
 }
 
