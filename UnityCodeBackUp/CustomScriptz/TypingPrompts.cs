@@ -23,72 +23,72 @@ public class TypingPrompts : MonoBehaviour
         "You have completed part 3.",
         };
     public static int[][][] subjects =
-    {
-        new int[][]{ // SUBJECT 1
-            new int[] { // TRIAL 1 (IRL)
+    {   
+        new int[3][]{ // SUBJECT 1
+            new int[6] { // TRIAL 1 (IRL)
                 1, 0, 2, 0, 3, 13
             },
-            new int[]{ // TRIAL 2 (VR ONLY)
+            new int[6]{ // TRIAL 2 (VR ONLY)
                 4, 0, 5, 0, 6, 11
             },
-            new int[]{ // TRIAL 3 (HAPTIC)
+            new int[6]{ // TRIAL 3 (HAPTIC)
                 7, 0, 8, 0, 9, 12
             }
         },
-        new int[][]{ // SUBJECT 2
-            new int[]{ // TRIAL 1 (HAPTIC)
+        new int[3][]{ // SUBJECT 2
+            new int[6]{ // TRIAL 1 (HAPTIC)
                 4, 0, 5, 0, 7, 10
             },
-            new int[]{ // TRIAL 2 (VR ONLY)
+            new int[6]{ // TRIAL 2 (VR ONLY)
                 9, 0, 3, 0, 2, 11
             },
-            new int[]{ // TRIAL 3 (IRL)
+            new int[6]{ // TRIAL 3 (IRL)
                 8, 0, 6, 0, 1, 15
             }
 
         },
-        new int[][]{ // SUBJECT 3
-            new int[]{ // TRIAL 1
+        new int[3][]{ // SUBJECT 3
+            new int[6]{ // TRIAL 1
                 3, 0, 4, 0, 1, 10
             },
-            new int[]{ // TRIAL 2
+            new int[6]{ // TRIAL 2
                 5, 0, 8, 0, 2, 14
 
             },
-            new int[]{ // TRIAL 3
+            new int[6]{ // TRIAL 3
                 7, 0, 9, 0, 6, 12
             }
         },
-        new int[][]{ // SUBJECT 4
-            new int[]{ // TRIAL 1
+        new int[3][]{ // SUBJECT 4
+            new int[6]{ // TRIAL 1
                 8, 0, 9, 0, 2, 13
             },
-            new int[]{ // TRIAL 2
+            new int[6]{ // TRIAL 2
                 6, 0, 4, 0, 5, 11
             },
-            new int[]{ // TRIAL 3
+            new int[6]{ // TRIAL 3
                 7, 0, 3, 0, 1, 12
             }
         },
-        new int[][]{ // SUBJECT 5
-            new int[]{ // TRIAL 1
+        new int[3][]{ // SUBJECT 5
+            new int[6]{ // TRIAL 1
                 6, 0, 1, 0, 7, 10
             },
-            new int[]{ // TRIAL 2
+            new int[6]{ // TRIAL 2
                 8, 0, 2, 0, 3, 14
             },
-            new int[]{ // TRIAL 3
+            new int[6]{ // TRIAL 3
                 9, 0, 5, 0, 4, 12
             }
         },
-        new int[][]{ // SUBJECT 6
+        new int[3][]{ // SUBJECT 6
             new int[]{ // TRIAL 1
                 1, 0, 6, 0, 9, 10
             },
-            new int[]{ // TRIAL 2
+            new int[6]{ // TRIAL 2
                 4, 0, 7, 0, 2, 14
             },
-            new int[]{ // TRIAL 3
+            new int[6]{ // TRIAL 3
                 3, 0, 5, 0, 8, 12
             }
         },
@@ -158,18 +158,9 @@ public class TypingPrompts : MonoBehaviour
                 8, 0, 3, 0, 2, 12
             }
         }
-    };
     
-    
-    public static int[] Subject1 =
-    {
-        0, 9, 1, 9, 2, 10
     };
-    public static int[] Subject2 =
-    {
-        2, 4, 6, 8, 1, 3, 5, 7, 9
-    };
-
+   
 }
 
 // start not required
