@@ -18,6 +18,9 @@ public class CollectDataToLog : MonoBehaviour
     // there needs to be a temporary name here or errors spring, idk
     //
     string filename = "temp.txt";
+    //public string SubjectNumber = "#";
+    //public string TrialNumber = "# + vr/hap/irl";
+
 
     void OnEnable()
     {
@@ -34,7 +37,7 @@ public class CollectDataToLog : MonoBehaviour
     {
         // Put any filename you desire in place of DataCollected.txt
         //
-        filename = Application.dataPath + "/DataCollected.txt";
+        filename = Application.dataPath + "/DataCollected/subject" + TrialInformation.subject_number + "_trial" + TrialInformation.trial_number + TrialInformation.TrialType + ".txt";
 
         // This will write a new file or append to an existing file of the given filename
         //
@@ -43,7 +46,7 @@ public class CollectDataToLog : MonoBehaviour
         // Adding some line breaks so start of data is easy to identify
         // including time logged with every datapoint
         //
-        tw.WriteLine("\n\n[" + System.DateTime.Now + "] Begin Data Collection :\n");
+        tw.WriteLine("\n\n[" + System.DateTime.Now + "] Begin Data Collection for subject "+ TrialInformation.subject_number + " trial " + TrialInformation.trial_number +":\n");
         tw.Close();
     }
 
