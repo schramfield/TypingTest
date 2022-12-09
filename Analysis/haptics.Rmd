@@ -1,0 +1,94 @@
+---
+title: "haptics"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+library(nlme)
+```
+
+## Analyze Haptics data
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r load}
+setwd("/Users/aspence/Documents/spencelab/haptics")
+#df <- read_excel('haptics.xlsx')
+df <- read_csv('FinalData.csv')
+summary(df)
+```
+
+## Prelim tests
+
+You can also embed plots, for example:
+
+```{r tests}
+mod <- lme(WPM ~ trial_type, random = ~1 | subject/prompt_num,na.action=na.omit,data=df)
+# Quote a significant main effect or interaction:
+dataov <- anova(mod)
+summary(mod)
+```
+
+## Plots
+
+```{r plot}
+pall <- df %>% ggplot(aes(x=trial_type, y=WPM)) + geom_boxplot() +
+  ggtitle("Words per minute versus trial type") +
+  theme(plot.title = element_text(hjust = .5))
+pall
+ggsave("wpm_vs_trialtype.pdf")
+pby <- df %>% ggplot(aes(x=trial_type, y=WPM)) + geom_boxplot() + facet_wrap(~subject) +
+  #labs(x = "") +
+  #ylab(theunits) +
+  #xlab("Time after SCI") +
+  ggtitle("Words per minute versus trial type by subject") +
+  theme(plot.title = element_text(hjust = .5))
+pby
+ggsave("wpm_vs_trialtype_bysubject.pdf")
+
+wpnb <- df %>% ggplot(aes(x=factor(prompt_num), y=WPM)) + geom_boxplot() +
+  #labs(x = "") +
+  #ylab(theunits) +
+  #xlab("Time after SCI") +
+  ggtitle("Words per minute versus prompt num") +
+  theme(plot.title = element_text(hjust = .5))
+wpnb
+ggsave("wpm_vs_promptnum.pdf")
+
+wpnbs <- df %>% ggplot(aes(x=factor(prompt_num), y=WPM)) + geom_boxplot() + facet_wrap(~subject) +
+  #labs(x = "") +
+  #ylab(theunits) +
+  #xlab("Time after SCI") +
+  ggtitle("Words per minute versus prompt num by subject") +
+  theme(plot.title = element_text(hjust = .5))
+wpnbs
+ggsave("wpm_vs_promptnum_bysubject.pdf")
+
+# error
+ett <- df %>% ggplot(aes(x=trial_type, y=error)) + geom_boxplot() +
+  #labs(x = "") +
+  #ylab(theunits) +
+  #xlab("Time after SCI") +
+  ggtitle("Errorversus trial type") +
+  theme(plot.title = element_text(hjust = .5))
+ett
+ggsave("error_vs_trialtype.pdf")
+
+etts <- df %>% ggplot(aes(x=trial_type, y=error)) + geom_boxplot() + facet_wrap(~subject) +
+  #labs(x = "") +
+  #ylab(theunits) +
+  #xlab("Time after SCI") +
+  ggtitle("Error versus trial type by subject") +
+  theme(plot.title = element_text(hjust = .5))
+etts
+ggsave("error_vs_trialtype_bysubject.pdf")
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
