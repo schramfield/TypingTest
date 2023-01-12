@@ -11,15 +11,14 @@ using System.IO;
 // It will automatically log any PUBLIC debug log statements
 // PRIVATE debug log statements (in private variables, classes, etc) will not appear
 // tag debug log statments as needed to make them easy to analyze with a python script later
-//
+// 
 
 public class CollectDataToLog : MonoBehaviour
 {
     // there needs to be a temporary name here or errors spring, idk
     //
     string filename = "temp.txt";
-    //public string SubjectNumber = "#";
-    //public string TrialNumber = "# + vr/hap/irl";
+    bool ready = false;
 
 
     void OnEnable()
@@ -32,22 +31,27 @@ public class CollectDataToLog : MonoBehaviour
         Application.logMessageReceived -= Log;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    // calling update because start came too fast
+    void Update()
     {
-        // Put any filename you desire in place of DataCollected.txt
-        //
-        filename = Application.dataPath + "/DataCollected/subject" + TrialInformation.subject_number + "_trial" + TrialInformation.trial_number + TrialInformation.TrialType + ".txt";
+        if (ready == false && TrialInformation.begin == true)
+        {
+            // Put any filename you desire in place of DataCollected.txt
+            // Pulls information from public static variables in TrialInformation to make useful names
+            //
+            filename = Application.dataPath + "/DataCollected/subject" + TrialInformation.subject_number + "_trial" + TrialInformation.trial_number + TrialInformation.TrialType + ".txt";
 
-        // This will write a new file or append to an existing file of the given filename
-        //
-        TextWriter tw = new StreamWriter(filename, true);
+            // This will write a new file or append to an existing file of the given filename
+            //
+            TextWriter tw = new StreamWriter(filename, true);
 
-        // Adding some line breaks so start of data is easy to identify
-        // including time logged with every datapoint
-        //
-        tw.WriteLine("\n\n[" + System.DateTime.Now + "] Begin Data Collection for subject "+ TrialInformation.subject_number + " trial " + TrialInformation.trial_number +":\n");
-        tw.Close();
+            // Adding some line breaks so start of data is easy to identify
+            // including time logged with every datapoint
+            //
+            tw.WriteLine("\n\n[" + System.DateTime.Now + "] Begin Data Collection for subject " + TrialInformation.subject_number + " trial " + TrialInformation.trial_number + ":\n");
+            tw.Close();
+            ready = true;
+        }
     }
 
     // This is the code for getting the log up and running

@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Purpose:
+// This is all the prompts I used in my test and the order they were used in hardcoded.
+// I don't love the hard coding either and it took a stupidly long time to do
+// It worked great though so ..  it's fine.
+// This is what you will need to chagne if you want to use different prompts!
+//
+
 public class TypingPrompts : MonoBehaviour
 {
     public static string[] listPrompts = {
@@ -28,10 +35,10 @@ public class TypingPrompts : MonoBehaviour
             new int[6] { // TRIAL 1 (IRL)
                 1, 0, 2, 0, 3, 13
             },
-            new int[6]{ // TRIAL 2 (VR ONLY)
+            new int[6]{ // TRIAL 2 (HAPTIC)
                 4, 0, 5, 0, 6, 11
             },
-            new int[6]{ // TRIAL 3 (HAPTIC)
+            new int[6]{ // TRIAL 3 (VR ONLY)
                 7, 0, 8, 0, 9, 12
             }
         },
